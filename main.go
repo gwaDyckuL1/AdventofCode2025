@@ -6,19 +6,21 @@ import (
 	"os"
 )
 
-var Problem int
+var Problem string
 var Path string
 
 func main() {
-	Problem = 1
-	Path = "imports/day1_Part1.txt"
+	Problem = "1.2"
+	Path = "imports/day1_Problem.txt"
 
 	data := ImportFile(Path)
 
 	switch Problem {
-	case 1:
+	case "1":
 		password := Part1(data)
 		fmt.Println("The password is: ", password)
+	case "1.2":
+		fmt.Println("The password is: ", Part2(data))
 	}
 
 }
