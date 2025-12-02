@@ -11,13 +11,14 @@ var Path string
 
 func main() {
 	Problem = 1
-	Path = "/imports/day1_Example.txt"
+	Path = "imports/day1_Part1.txt"
 
 	data := ImportFile(Path)
 
 	switch Problem {
 	case 1:
-		fmt.Println("The password is: ", Part1(data))
+		password := Part1(data)
+		fmt.Println("The password is: ", password)
 	}
 
 }
