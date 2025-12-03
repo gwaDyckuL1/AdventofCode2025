@@ -10,8 +10,8 @@ var Problem string
 var Path string
 
 func main() {
-	Problem = "2.2"
-	Path = "imports/day2_Problem.txt"
+	Problem = "3.2"
+	Path = "imports/day3_Example.txt"
 
 	data := ImportFile(Path)
 
@@ -25,6 +25,10 @@ func main() {
 		fmt.Println("Sum of invalid ID's: ", Day2Part1(data))
 	case "2.2":
 		fmt.Println("Sum of invalid ID's: ", Day2Part2(data))
+	case "3":
+		fmt.Println("Total output joltage: ", Day3Part1(data))
+	case "3.2":
+		fmt.Println("Total output joltage: ", Day3Part2(data))
 	}
 
 }
