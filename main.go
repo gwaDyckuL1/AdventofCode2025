@@ -11,7 +11,7 @@ var Path string
 
 func main() {
 	Problem = "4.2"
-	Path = "imports/day4_Example.txt"
+	Path = "imports/day4_Problem.txt"
 
 	data := ImportFile(Path)
 
