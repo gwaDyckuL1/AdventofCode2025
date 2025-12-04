@@ -34,5 +34,30 @@ func Day3Part1(data []string) int {
 func Day3Part2(data []string) int {
 	answer := 0
 
+	for bank := 0; bank < len(data); bank++ {
+		var jolts [12]byte
+		counter := 0
+		for battery := len(data[bank]) - 1; battery >= 0; battery-- {
+			if counter < 12 {
+				jolts[11-counter] = data[bank][battery]
+				counter++
+				continue
+			}
+			currBattery := data[bank][battery]
+			for idx, currJolt := range jolts {
+				if currBattery < currJolt {
+					break
+				}
+				jolts[idx] = currBattery
+				currBattery = currJolt
+			}
+		}
+		number, err := strconv.Atoi(string(jolts[:]))
+		if err != nil {
+			fmt.Println("Problem turning bytes to number")
+		}
+		answer += number
+	}
+
 	return answer
 }
