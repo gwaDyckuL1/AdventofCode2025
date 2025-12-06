@@ -10,7 +10,7 @@ var Problem string
 var Path string
 
 func main() {
-	Problem = "6"
+	Problem = "6.2"
 	Path = "imports/day6_Problem.txt"
 
 	data := ImportFile(Path)
@@ -38,7 +38,9 @@ func main() {
 	case "5.2":
 		fmt.Printf("%d available ingredients are fresh.", Day5Part2(data))
 	case "6":
-		fmt.Printf("Grand Total: %d", day6Part1(data))
+		fmt.Printf("Grand Total: %d", Day6Part1(data))
+	case "6.2":
+		fmt.Printf("Grand Total: %d", Day6Part2(data))
 	}
 
 }
