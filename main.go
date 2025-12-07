@@ -11,7 +11,7 @@ var Path string
 
 func main() {
 	Problem = "7.2"
-	Path = "imports/day7_Excercise.txt"
+	Path = "imports/day7_Example.txt"
 
 	data := ImportFile(Path)
 
@@ -44,7 +44,7 @@ func main() {
 	case "7":
 		fmt.Printf("The beam is split %d times", Day7Part1(data))
 	case "7.2":
-		fmt.Printf("The beam is split %d times", Day7Part2(data))
+		fmt.Printf("The beam can travel %d different paths", Day7Part2(data))
 	}
 
 }
