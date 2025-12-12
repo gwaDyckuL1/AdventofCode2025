@@ -10,8 +10,8 @@ var Problem string
 var Path string
 
 func main() {
-	Problem = "8.2"
-	Path = "imports/day8_Problem.txt"
+	Problem = "9"
+	Path = "imports/day9_Problem.txt"
 
 	data := ImportFile(Path)
 
@@ -49,6 +49,8 @@ func main() {
 		fmt.Println("Mulitipling the 3 largest gets you a result of ", Day8Part1(data, Path))
 	case "8.2":
 		fmt.Println("Multiplying the x coordinates for the big circut makers is: ", Day8Part2(data, Path))
+	case "9":
+		fmt.Println("The largest area rectangle has an area of ", Day9Part1(data))
 	}
 
 }
