@@ -10,7 +10,7 @@ var Problem string
 var Path string
 
 func main() {
-	Problem = "8"
+	Problem = "8.2"
 	Path = "imports/day8_Problem.txt"
 
 	data := ImportFile(Path)
@@ -47,6 +47,8 @@ func main() {
 		fmt.Printf("The beam can travel %d different paths", Day7Part2(data))
 	case "8":
 		fmt.Println("Mulitipling the 3 largest gets you a result of ", Day8Part1(data, Path))
+	case "8.2":
+		fmt.Println("Multiplying the x coordinates for the big circut makers is: ", Day8Part2(data, Path))
 	}
 
 }

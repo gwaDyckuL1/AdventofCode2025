@@ -2,6 +2,7 @@ package main
 
 import (
 	"container/heap"
+	"fmt"
 	"log"
 	"math"
 	"sort"
@@ -19,6 +20,8 @@ type Family struct {
 }
 
 type CHeap []Circuits
+
+type MinHeap []Circuits
 
 func Day8Part1(data []string, problem string) int {
 	answer := 0
@@ -104,6 +107,97 @@ func Day8Part1(data []string, problem string) int {
 	return answer
 }
 
+func Day8Part2(data []string, problem string) int {
+	answer := 0
+	properData := inputToInt(data)
+	h := &MinHeap{}
+	heap.Init(h)
+	for i := 1; i < len(properData); i++ {
+		for j := i + 1; j < len(properData); j++ {
+			box1 := properData[i]
+			box2 := properData[j]
+			dx := float64(box1[0] - box2[0])
+			dy := float64(box1[1] - box2[1])
+			dz := float64(box1[2] - box2[2])
+			distance := math.Sqrt(dx*dx + dy*dy + dz*dz)
+			newCircuit := Circuits{
+				Distance: distance,
+				Boxes:    [2][3]int{box1, box2},
+			}
+			heap.Push(h, newCircuit)
+		}
+	}
+	AllCount := len(properData)
+	familyMap := map[[3]int]Family{}
+	lastTwo := [2][3]int{}
+	completed := false
+	for h.Len() > 0 {
+		circut := heap.Pop(h).(Circuits)
+		box1, box2 := circut.Boxes[0], circut.Boxes[1]
+		_, b1Exist := familyMap[box1]
+		_, b2Exist := familyMap[box2]
+		switch {
+		case !b1Exist && !b2Exist: //neither exist
+			child := [][3]int{box1, box2}
+			familyMap[box1] = Family{
+				parent:   box1,
+				children: child,
+			}
+			familyMap[box2] = Family{parent: box1}
+		case b1Exist && b2Exist: //both exist
+			b1Parent := findParent(familyMap, familyMap[box1].parent)
+			b2Parent := findParent(familyMap, familyMap[box2].parent)
+			if b1Parent == b2Parent {
+				continue
+			}
+			b1ChildLen := len(familyMap[b1Parent].children)
+			b2ChildLen := len(familyMap[b2Parent].children)
+			if b1ChildLen < b2ChildLen {
+				b1Parent, b2Parent = b2Parent, b1Parent
+			}
+			b1Family := familyMap[b1Parent]
+			b2Family := familyMap[b2Parent]
+			b1Family.children = append(b1Family.children, b2Family.children...)
+			b2Family.parent = b1Parent
+			b2Family.children = [][3]int{}
+			familyMap[b1Parent] = b1Family
+			familyMap[b2Parent] = b2Family
+			completed = (len(familyMap[b1Parent].children) == AllCount-1)
+			if completed {
+				lastTwo[0] = box1
+				lastTwo[1] = box2
+			}
+		case b1Exist || b2Exist: //one of them exist
+			if b2Exist {
+				box1, box2 = box2, box1
+			}
+			b1Parent := findParent(familyMap, familyMap[box1].parent)
+			b1Family := familyMap[b1Parent]
+			b1Family.children = append(b1Family.children, box2)
+			familyMap[b1Parent] = b1Family
+			familyMap[box2] = Family{parent: b1Parent}
+			completed = (len(familyMap[b1Parent].children) == AllCount-1)
+			if completed {
+				lastTwo[0] = box1
+				lastTwo[1] = box2
+			}
+		}
+	}
+	circutSize := []int{}
+	for _, key := range familyMap {
+		size := len(key.children)
+		circutSize = append(circutSize, size)
+	}
+	sort.Slice(circutSize, func(i, j int) bool {
+		return circutSize[i] > circutSize[j]
+	})
+	fmt.Println(circutSize)
+
+	answer = lastTwo[0][0] * lastTwo[1][0]
+	fmt.Println(lastTwo)
+	return answer
+}
+
 func findParent(familymap map[[3]int]Family, box [3]int) [3]int {
 	curParent := familymap[box].parent
 	if curParent != box {
@@ -112,13 +206,6 @@ func findParent(familymap map[[3]int]Family, box [3]int) [3]int {
 	return curParent
 }
 
-//	func abs(x, y int) int {
-//		answer := x - y
-//		if answer < 0 {
-//			return answer * -1
-//		}
-//		return answer
-//	}
 func inputToInt(data []string) [][3]int {
 	properData := [][3]int{}
 	for _, line := range data {
@@ -150,6 +237,25 @@ func (h *CHeap) Pop() any {
 	return x
 }
 func (h CHeap) Peek() float64 {
+	if h.Len() == 0 {
+		return 0
+	}
+	return h[0].Distance
+}
+func (h MinHeap) Len() int           { return len(h) }
+func (h MinHeap) Less(i, j int) bool { return h[i].Distance < h[j].Distance }
+func (h MinHeap) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
+func (h *MinHeap) Push(x any) {
+	*h = append(*h, x.(Circuits))
+}
+func (h *MinHeap) Pop() any {
+	old := *h
+	n := len(old)
+	x := old[n-1]
+	*h = old[0 : n-1]
+	return x
+}
+func (h MinHeap) Peek() float64 {
 	if h.Len() == 0 {
 		return 0
 	}
