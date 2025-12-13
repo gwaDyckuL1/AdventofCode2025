@@ -10,7 +10,7 @@ var Problem string
 var Path string
 
 func main() {
-	Problem = "9"
+	Problem = "9.2"
 	Path = "imports/day9_Problem.txt"
 
 	data := ImportFile(Path)
@@ -51,6 +51,8 @@ func main() {
 		fmt.Println("Multiplying the x coordinates for the big circut makers is: ", Day8Part2(data, Path))
 	case "9":
 		fmt.Println("The largest area rectangle has an area of ", Day9Part1(data))
+	case "9.2":
+		fmt.Println("Using only red and green tiles the largest area is ", Day9Part2(data))
 	}
 
 }
